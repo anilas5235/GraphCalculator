@@ -12,13 +12,22 @@ namespace GraphCalculator
 {
     public partial class Form1 : Form
     {
+        private double zoomFactor = 1d;
+        private PaintEventHandler painter;
         public Form1()
         {
             InitializeComponent();
         }
 
         private float graphViewHalfWidth, graphViewHalfHeight, graphViewWidth, graphViewHeight;
-        
+
+        private void Zoom(object sender, MouseEventArgs e)
+        {
+            zoomFactor += e.Delta*0.001*zoomFactor;
+            if (zoomFactor < .01d) zoomFactor = 0.01d;
+            this.Refresh();
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {            
             picbGraphView.BackColor = Color.LightGray;
@@ -28,7 +37,8 @@ namespace GraphCalculator
             graphViewHeight = picbGraphView.Size.Height;
             graphViewWidth = picbGraphView.Size.Width;
 
-            picbGraphView.Paint += new PaintEventHandler(this.DrawGraph);           
+            painter =new PaintEventHandler(this.DrawGraph);
+            picbGraphView.Paint += painter;        
         }
         public void DrawGraph(object sender,PaintEventArgs e)
         {
@@ -37,11 +47,12 @@ namespace GraphCalculator
             
             for (int x = 0; x < picbGraphView.Size.Width; x++)
             {
-                points.Add(new PointF(
-                    x, (float)(graphViewHalfHeight- GraphFunction(x-graphViewHalfWidth))
-                    ));
+                float y = (float)(graphViewHalfHeight - GraphFunction((x - graphViewHalfWidth) * zoomFactor));
+                if (y > graphViewHalfHeight) y = graphViewHalfHeight + 1;
+                else if (y < -graphViewHalfHeight) y = -graphViewHalfHeight - 1;
+                points.Add(new PointF(x,y));
             }
-            double GraphFunction(float x)
+            double GraphFunction(double x)
             {
                 return Math.Pow(x,2);
             }
