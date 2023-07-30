@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using LesGraphingCalc;
 using Loyc.Collections;
-using Loyc.Syntax.Les;
-using Loyc.Syntax;
-using static System.Net.Mime.MediaTypeNames;
+using AngouriMath;
+using AngouriMath.Extensions;
+
 
 namespace GraphCalculator
 {
@@ -36,18 +32,9 @@ namespace GraphCalculator
         public Form1()
         {
             InitializeComponent();
-            tbxFormula.Text = "x**2+2*x-7";
-            ParseToFomula( tbxFormula.Text); 
-            
-        }
-
-        private void ParseToFomula(string text)
-        {
-            char variableX = 'x';
-            text = System.Text.RegularExpressions.Regex.Replace(text, @"\^", "**");
-            List<char> chars = text.ToList();
-
-        }
+            tbxFormula.Text = "x^2+2 * x - 7";
+                      
+        }        
 
         
         private void palGraphView_MouseDown(object sender, MouseEventArgs e)
@@ -81,12 +68,16 @@ namespace GraphCalculator
             if(drag) drag = false;
         }
 
+        private void tbxFormula_TextChanged(object sender, EventArgs e)
+        {
+            this.Refresh();
+        }
+
         private void Zoom(object sender, MouseEventArgs e)
         {
             int delta = e.Delta > 0 ? 1 : -1;
             pixelsPerUnit += delta*pixelsPerUnit*.1f;
-            if(pixelsPerUnit == 0) pixelsPerUnit = float.MinValue;
-            System.Diagnostics.Debug.WriteLine($"pixelsPerUnit {pixelsPerUnit}");
+            if(pixelsPerUnit == 0) pixelsPerUnit = float.MinValue;            
             this.Refresh();
         }
 
@@ -118,22 +109,46 @@ namespace GraphCalculator
         }
         public void DrawGraph(object sender,PaintEventArgs e)
         {
+            DrawAxis(e);
+
             Pen pen = new Pen(Color.Red,3);
-            List<PointF> points = new List<PointF>();            
+            List<PointF> points = new List<PointF>();
+
+            string text = tbxFormula.Text;
+            Entity expr;
+
+            try
+            {
+                expr = text;
+            }
+            catch (AngouriMath.Core.Exceptions.UnhandledParseException)
+            {
+                System.Console.WriteLine("Function Parsing failed");
+                return;
+                throw;
+            }
             
+            
+            
+            var Function = expr.Compile<double, double>("x");            
+
             for (int x = 0; x < graphViewWidth; x++)
             {
                 double xVal = (x - originX)/pixelsPerUnit;
-                float y =  ((float)originY - (float)GraphFunction(xVal)*pixelsPerUnit);                  
-                points.Add(new PointF(x,y));
+                float y =  ((float)originY - (float)Function(xVal)*pixelsPerUnit);  
+                if(!(y == float.NaN)) points.Add(new PointF(x,y));
             }
-            double GraphFunction(double x)
+            try
             {
-                return Math.Pow(x,2);
+                e.Graphics.DrawCurve(pen, points.ToArray());
             }
-            e.Graphics.DrawCurve(pen, points.ToArray());
-
-            DrawAxis(e);
+            catch (System.OverflowException)
+            {
+                System.Console.WriteLine("Draw Faied");
+                return;
+                throw;
+            }
+            
         }
 
         private void DrawAxis(PaintEventArgs e)

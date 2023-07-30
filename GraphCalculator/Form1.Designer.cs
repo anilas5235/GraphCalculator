@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.palGraphView = new System.Windows.Forms.Panel();
             this.tbxFormula = new System.Windows.Forms.TextBox();
+            this.palGraphView = new System.Windows.Forms.Panel();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,6 +45,14 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
             // 
+            // tbxFormula
+            // 
+            this.tbxFormula.Location = new System.Drawing.Point(7, 20);
+            this.tbxFormula.Name = "tbxFormula";
+            this.tbxFormula.Size = new System.Drawing.Size(100, 20);
+            this.tbxFormula.TabIndex = 0;
+            this.tbxFormula.TextChanged += new System.EventHandler(this.tbxFormula_TextChanged);
+            // 
             // palGraphView
             // 
             this.palGraphView.Location = new System.Drawing.Point(172, 12);
@@ -55,13 +63,6 @@
             this.palGraphView.MouseLeave += new System.EventHandler(this.palGraphView_MouseLeave);
             this.palGraphView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.palGraphView_MouseMove);
             this.palGraphView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.palGraphView_MouseUp);
-            // 
-            // tbxFormula
-            // 
-            this.tbxFormula.Location = new System.Drawing.Point(7, 20);
-            this.tbxFormula.Name = "tbxFormula";
-            this.tbxFormula.Size = new System.Drawing.Size(100, 20);
-            this.tbxFormula.TabIndex = 0;
             // 
             // Form1
             // 
