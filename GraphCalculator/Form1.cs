@@ -25,23 +25,31 @@ namespace GraphCalculator
         private Point oldMousePosition;
         private PaintEventHandler painter;
 
+        private float graphViewHalfWidth, graphViewHalfHeight, graphViewWidth, graphViewHeight;
+
         private Pen penBig = new Pen(Brushes.Black, 2),
                     penNormal = new Pen(Brushes.Black, 1),
                     penSmall = new Pen(Color.FromArgb(100, 0, 0, 0), 1);
         Font AxisIndictorsFont = new Font("Arital", 12, FontStyle.Bold);
+
+
         public Form1()
         {
             InitializeComponent();
             tbxFormula.Text = "x**2+2*x-7";
-            string text = tbxFormula.Text;
-            text = System.Text.RegularExpressions.Regex.Replace(text, @"([-+*/%^&*|<>=?.])([-~!+])", "$1 $2");
-            text = System.Text.RegularExpressions.Regex.Replace(text, @"\^", "**");
-            List<char> chars = text.ToList();
-            tbxFormula.Text = text;
+            ParseToFomula( tbxFormula.Text); 
+            
         }
 
-        private float graphViewHalfWidth, graphViewHalfHeight, graphViewWidth, graphViewHeight;
+        private void ParseToFomula(string text)
+        {
+            char variableX = 'x';
+            text = System.Text.RegularExpressions.Regex.Replace(text, @"\^", "**");
+            List<char> chars = text.ToList();
 
+        }
+
+        
         private void palGraphView_MouseDown(object sender, MouseEventArgs e)
         {
             if (!drag && e.Button == MouseButtons.Left)
