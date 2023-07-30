@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LesGraphingCalc;
+using Loyc.Collections;
+using Loyc.Syntax.Les;
+using Loyc.Syntax;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GraphCalculator
 {
@@ -14,21 +20,58 @@ namespace GraphCalculator
     {
         private float pixelsPerUnit = 100,UnitsPerStep = 1;        
         private double originX,originY;
-        private PaintEventHandler painter;
-        private Point oldMousePosition;
         private bool drag = false;
         private int zoomStufe = 0;
+        private Point oldMousePosition;
+        private PaintEventHandler painter;
 
         private Pen penBig = new Pen(Brushes.Black, 2),
                     penNormal = new Pen(Brushes.Black, 1),
                     penSmall = new Pen(Color.FromArgb(100, 0, 0, 0), 1);
-        Font font = new Font("Arital", 12, FontStyle.Bold);
+        Font AxisIndictorsFont = new Font("Arital", 12, FontStyle.Bold);
         public Form1()
         {
             InitializeComponent();
+            tbxFormula.Text = "x**2+2*x-7";
+            string text = tbxFormula.Text;
+            text = System.Text.RegularExpressions.Regex.Replace(text, @"([-+*/%^&*|<>=?.])([-~!+])", "$1 $2");
+            text = System.Text.RegularExpressions.Regex.Replace(text, @"\^", "**");
+            List<char> chars = text.ToList();
+            tbxFormula.Text = text;
         }
 
         private float graphViewHalfWidth, graphViewHalfHeight, graphViewWidth, graphViewHeight;
+
+        private void palGraphView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!drag && e.Button == MouseButtons.Left)
+            {
+                oldMousePosition = e.Location;
+                drag = true;
+            }
+        }
+
+        private void palGraphView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (drag)
+            {
+                float step = UnitsPerStep * pixelsPerUnit * .01f;
+                originX += step * (e.X - oldMousePosition.X);
+                originY += step*(e.Y - oldMousePosition.Y);
+                oldMousePosition = e.Location;
+                this.Refresh();
+            }
+        }
+
+        private void palGraphView_MouseUp(object sender, MouseEventArgs e)
+        {
+            if(drag && e.Button == MouseButtons.Left) drag = false;
+        }
+
+        private void palGraphView_MouseLeave(object sender, EventArgs e)
+        {
+            if(drag) drag = false;
+        }
 
         private void Zoom(object sender, MouseEventArgs e)
         {
@@ -53,17 +96,17 @@ namespace GraphCalculator
 
         private void Form1_Load(object sender, EventArgs e)
         {            
-            picbGraphView.BackColor = Color.LightGray;
-            picbGraphView.ForeColor = Color.Black;
-            graphViewHeight = picbGraphView.Size.Height;
-            graphViewWidth = picbGraphView.Size.Width;
+            palGraphView.BackColor = Color.LightGray;
+            palGraphView.ForeColor = Color.Black;
+            graphViewHeight = palGraphView.Size.Height;
+            graphViewWidth = palGraphView.Size.Width;
             graphViewHalfHeight = graphViewHeight / 2f;
             graphViewHalfWidth  = graphViewWidth / 2f;
             originX = graphViewHalfWidth;
             originY = graphViewHalfHeight;
 
             painter =new PaintEventHandler(this.DrawGraph);
-            picbGraphView.Paint += painter;        
+            palGraphView.Paint += painter;        
         }
         public void DrawGraph(object sender,PaintEventArgs e)
         {
@@ -118,7 +161,7 @@ namespace GraphCalculator
                 e.Graphics.DrawLine(penNormal, positiveX, 0, positiveX, graphViewHeight);
                 string val = Math.Round((positiveX - originX) / pixelsPerUnit, zoomStufe<=0? 0 : zoomStufe).ToString();
                 if (val == "0") val = "";
-                e.Graphics.DrawString(val, font, penNormal.Brush, new PointF(positiveX - 5 * val.Length, (float)YDrawPosition));
+                e.Graphics.DrawString(val, AxisIndictorsFont, penNormal.Brush, new PointF(positiveX - 5 * val.Length, (float)YDrawPosition));
 
                 for (float i = 1; i < 5; i++)
                 {
@@ -134,7 +177,7 @@ namespace GraphCalculator
             float step = UnitsPerStep * pixelsPerUnit;
             float smalStep = step / 5;
 
-            float drawOffset = -5;
+            float drawOffset = 20;
             double XDrawPosition = originX - drawOffset;
             if (XDrawPosition < -1) XDrawPosition = -1;
             else if (XDrawPosition > graphViewWidth - drawOffset) XDrawPosition = graphViewWidth - drawOffset;
@@ -152,7 +195,7 @@ namespace GraphCalculator
                 
                 string val = Math.Round(-1 * (positiveY - originY) / pixelsPerUnit, zoomStufe <= 0 ? 0 : zoomStufe).ToString();
                 if (val == "0") val = ""; 
-                e.Graphics.DrawString(val, font, penNormal.Brush, new PointF((float)XDrawPosition, positiveY - 15));
+                e.Graphics.DrawString(val, AxisIndictorsFont, penNormal.Brush, new PointF((float)XDrawPosition, positiveY - 15));
 
                 for (float i = 1; i < 5; i++)
                 {
@@ -160,6 +203,7 @@ namespace GraphCalculator
                     e.Graphics.DrawLine(penSmall, 0, tempY, graphViewWidth, tempY);
                 }
             }
-        }  
+        }
+
     }
 }

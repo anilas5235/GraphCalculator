@@ -21,5 +21,6 @@ namespace GraphCalculator
             Application.Run(new Form1());
         }
     }
+
 }
    
