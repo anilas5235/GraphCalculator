@@ -5,23 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Loyc.Collections;
 using AngouriMath;
 using AngouriMath.Extensions;
-
+using System.ComponentModel;
+using System.Threading;
 
 namespace GraphCalculator
 {
     public partial class Form1 : Form
     {
+        private float graphViewHalfWidth, graphViewHalfHeight, graphViewWidth, graphViewHeight;
         private float pixelsPerUnit = 100,UnitsPerStep = 1;        
         private double originX,originY;
         private bool drag = false;
-        private int zoomStufe = 0;
+        private int zoomStufe = 0;       
+
+
         private Point oldMousePosition;
         private PaintEventHandler painter;
-
-        private float graphViewHalfWidth, graphViewHalfHeight, graphViewWidth, graphViewHeight;
 
         private Pen penBig = new Pen(Brushes.Black, 2),
                     penNormal = new Pen(Brushes.Black, 1),
@@ -109,19 +110,22 @@ namespace GraphCalculator
             originX = graphViewHalfWidth;
             originY = graphViewHalfHeight;
 
-            painter = new PaintEventHandler(this.DrawAllGraphs);
+            painter = new PaintEventHandler(this.DrawGraphView);
             palGraphView.Paint += painter;        
         }
 
-        public void DrawAllGraphs(object sender, PaintEventArgs e)
+        public void DrawGraphView(object sender, PaintEventArgs e)
         {
+            DrawAxis(e);
+
+            
+
             DrawGraph(e, tbxFormula.Text, Color.Red);
             DrawGraph(e, tbxFormula2.Text, Color.Green);
         }
 
         public void DrawGraph(PaintEventArgs e,string formulaText,Color graphColor)
-        {
-            DrawAxis(e);
+        {           
 
             Pen pen = new Pen(graphColor,3);
             List<PointF> points = new List<PointF>();

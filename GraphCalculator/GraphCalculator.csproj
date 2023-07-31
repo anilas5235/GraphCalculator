@@ -48,24 +48,6 @@
     <Reference Include="IndexRange, Version=1.0.0.0, Culture=neutral, PublicKeyToken=35e6a3c4212514c6, processorArchitecture=MSIL">
       <HintPath>..\packages\IndexRange.1.0.0\lib\net471\IndexRange.dll</HintPath>
     </Reference>
-    <Reference Include="Loyc.Collections, Version=30.1.0.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Loyc.Collections.30.1.0\lib\net45\Loyc.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Loyc.Essentials, Version=30.1.0.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Loyc.Essentials.30.1.0\lib\net472\Loyc.Essentials.dll</HintPath>
-    </Reference>
-    <Reference Include="Loyc.Interfaces, Version=30.1.0.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Loyc.Interfaces.30.1.0\lib\net472\Loyc.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Loyc.Math, Version=30.1.0.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Loyc.Math.30.1.0\lib\net472\Loyc.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="Loyc.Syntax, Version=30.1.0.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Loyc.Syntax.30.1.0\lib\net472\Loyc.Syntax.dll</HintPath>
-    </Reference>
-    <Reference Include="Loyc.Utilities, Version=30.1.0.0, Culture=neutral, PublicKeyToken=b1460dff8a28f7a7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Loyc.Utilities.30.1.0\lib\net472\Loyc.Utilities.dll</HintPath>
-    </Reference>
     <Reference Include="Numbers, Version=1.8.0.0, Culture=neutral, PublicKeyToken=9cd62db60ea5554c, processorArchitecture=MSIL">
       <HintPath>..\packages\PeterO.Numbers.1.8.0\lib\net40\Numbers.dll</HintPath>
     </Reference>
