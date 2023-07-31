@@ -28,28 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbFunctions = new System.Windows.Forms.GroupBox();
             this.tbxFormula = new System.Windows.Forms.TextBox();
             this.palGraphView = new System.Windows.Forms.Panel();
-            this.groupBox1.SuspendLayout();
+            this.tbxFormula2 = new System.Windows.Forms.TextBox();
+            this.gbFunctions.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox1
+            // gbFunctions
             // 
-            this.groupBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.groupBox1.Controls.Add(this.tbxFormula);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(154, 800);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.gbFunctions.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.gbFunctions.Controls.Add(this.tbxFormula2);
+            this.gbFunctions.Controls.Add(this.tbxFormula);
+            this.gbFunctions.Location = new System.Drawing.Point(12, 12);
+            this.gbFunctions.Name = "gbFunctions";
+            this.gbFunctions.Size = new System.Drawing.Size(154, 800);
+            this.gbFunctions.TabIndex = 1;
+            this.gbFunctions.TabStop = false;
+            this.gbFunctions.Text = "Functions";
             // 
             // tbxFormula
             // 
             this.tbxFormula.Location = new System.Drawing.Point(7, 20);
             this.tbxFormula.Name = "tbxFormula";
-            this.tbxFormula.Size = new System.Drawing.Size(100, 20);
+            this.tbxFormula.Size = new System.Drawing.Size(141, 20);
             this.tbxFormula.TabIndex = 0;
             this.tbxFormula.TextChanged += new System.EventHandler(this.tbxFormula_TextChanged);
             // 
@@ -64,28 +66,37 @@
             this.palGraphView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.palGraphView_MouseMove);
             this.palGraphView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.palGraphView_MouseUp);
             // 
+            // tbxFormula2
+            // 
+            this.tbxFormula2.Location = new System.Drawing.Point(6, 46);
+            this.tbxFormula2.Name = "tbxFormula2";
+            this.tbxFormula2.Size = new System.Drawing.Size(141, 20);
+            this.tbxFormula2.TabIndex = 1;
+            this.tbxFormula2.TextChanged += new System.EventHandler(this.tbxFormula2_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1180, 1016);
             this.Controls.Add(this.palGraphView);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbFunctions);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Zoom);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbFunctions.ResumeLayout(false);
+            this.gbFunctions.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbFunctions;
         private System.Windows.Forms.Panel palGraphView;
         private System.Windows.Forms.TextBox tbxFormula;
+        private System.Windows.Forms.TextBox tbxFormula2;
     }
 }
 

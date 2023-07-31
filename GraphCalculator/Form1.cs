@@ -32,7 +32,7 @@ namespace GraphCalculator
         public Form1()
         {
             InitializeComponent();
-            tbxFormula.Text = "x^2+2 * x - 7";
+            tbxFormula.Text = "1/x";
                       
         }        
 
@@ -81,6 +81,11 @@ namespace GraphCalculator
             this.Refresh();
         }
 
+        private void tbxFormula2_TextChanged(object sender, EventArgs e)
+        {
+            this.Refresh();
+        }
+
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
             float step = UnitsPerStep * pixelsPerUnit*.1f;
@@ -104,17 +109,25 @@ namespace GraphCalculator
             originX = graphViewHalfWidth;
             originY = graphViewHalfHeight;
 
-            painter =new PaintEventHandler(this.DrawGraph);
+            painter = new PaintEventHandler(this.DrawAllGraphs);
             palGraphView.Paint += painter;        
         }
-        public void DrawGraph(object sender,PaintEventArgs e)
+
+        public void DrawAllGraphs(object sender, PaintEventArgs e)
+        {
+            DrawGraph(e, tbxFormula.Text, Color.Red);
+            DrawGraph(e, tbxFormula2.Text, Color.Green);
+        }
+
+        public void DrawGraph(PaintEventArgs e,string formulaText,Color graphColor)
         {
             DrawAxis(e);
 
-            Pen pen = new Pen(Color.Red,3);
+            Pen pen = new Pen(graphColor,3);
             List<PointF> points = new List<PointF>();
+            List<PointF[]> Draws = new List<PointF[]>();
 
-            string text = tbxFormula.Text;
+            string text = formulaText;
             Entity expr;
 
             try
@@ -127,28 +140,57 @@ namespace GraphCalculator
                 return;
                 throw;
             }
-            
-            
-            
-            var Function = expr.Compile<double, double>("x");            
 
-            for (int x = 0; x < graphViewWidth; x++)
-            {
-                double xVal = (x - originX)/pixelsPerUnit;
-                float y =  ((float)originY - (float)Function(xVal)*pixelsPerUnit);  
-                if(!(y == float.NaN)) points.Add(new PointF(x,y));
-            }
+            Func<double,double> Function;
+
             try
             {
-                e.Graphics.DrawCurve(pen, points.ToArray());
+                Function = expr.Compile<double, double>("x");
             }
-            catch (System.OverflowException)
+            catch (System.Collections.Generic.KeyNotFoundException)
             {
-                System.Console.WriteLine("Draw Faied");
                 return;
                 throw;
             }
             
+            
+
+            bool addToDraw = true;
+            for (int x = 0; x < graphViewWidth; x++)
+            {
+                double xVal = (x - originX)/pixelsPerUnit;
+                float y =  ((float)originY - (float)Function(xVal)*pixelsPerUnit);  
+                if(y == float.NaN || y == float.NegativeInfinity|| y== float.PositiveInfinity)
+                {
+                    if (addToDraw)
+                    {
+                        Draws.Add(points.ToArray());
+                        points.Clear();
+                        addToDraw = false;
+                    }
+                }
+                else
+                {
+                    if (!addToDraw) addToDraw = true;                    
+                    points.Add(new PointF(x, y));
+                }                 
+            }
+            if(addToDraw) Draws.Add(points.ToArray());
+
+            foreach (var draw in Draws)
+            {
+                try
+                {
+                    e.Graphics.DrawCurve(pen, draw);
+                }
+                catch (System.OverflowException)
+                {
+                    System.Console.WriteLine("Draw Faied");
+                    return;
+                    throw;
+                }
+
+            }
         }
 
         private void DrawAxis(PaintEventArgs e)
