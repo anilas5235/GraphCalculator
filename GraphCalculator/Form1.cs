@@ -18,26 +18,38 @@ namespace GraphCalculator
         private float pixelsPerUnit = 100,UnitsPerStep = 1;        
         private double originX,originY;
         private bool drag = false;
-        private int zoomStufe = 0;       
+        private int zoomStufe = 0;
+
+        private Color[] graphColors = new Color[] 
+        {Color.Red,Color.Green,Color.Gold,Color.Blue,Color.Indigo,Color.LightBlue,Color.Pink,Color.Violet,
+        Color.Wheat,Color.AliceBlue,Color.Beige};
 
 
-        private Point oldMousePosition;
-        private PaintEventHandler painter;
+        private Point oldMousePosition;        
 
         private Pen penBig = new Pen(Brushes.Black, 2),
                     penNormal = new Pen(Brushes.Black, 1),
                     penSmall = new Pen(Color.FromArgb(100, 0, 0, 0), 1);
+
         Font AxisIndictorsFont = new Font("Arital", 12, FontStyle.Bold);
+        Font labelFont = new Font("Arital", 20, FontStyle.Bold);
+
+
+        List<TextBox> functionInputs = new List<TextBox>();
 
 
         public Form1()
         {
-            InitializeComponent();
-            tbxFormula.Text = "1/x";
-                      
-        }        
+            InitializeComponent();                                 
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            GraphViewInitializing(); 
+            AddFunctionSlot();
+        }
 
-        
+        #region EventsOnInput        
+
         private void palGraphView_MouseDown(object sender, MouseEventArgs e)
         {
             if (!drag && e.Button == MouseButtons.Left)
@@ -80,12 +92,7 @@ namespace GraphCalculator
             pixelsPerUnit += delta*pixelsPerUnit*.1f;
             if(pixelsPerUnit == 0) pixelsPerUnit = float.MinValue;            
             this.Refresh();
-        }
-
-        private void tbxFormula2_TextChanged(object sender, EventArgs e)
-        {
-            this.Refresh();
-        }
+        }        
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -97,31 +104,44 @@ namespace GraphCalculator
             else if (e.KeyCode == Keys.NumPad4 || e.KeyCode == Keys.A) originX += step;
 
             this.Refresh();
+        }        
+
+        private void btnAddSlot_Click(object sender, EventArgs e)
+        {
+            AddFunctionSlot();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {            
+        #endregion
+
+        #region GraphViewDraws
+
+        private void GraphViewInitializing()
+        {
             palGraphView.BackColor = Color.LightGray;
             palGraphView.ForeColor = Color.Black;
             graphViewHeight = palGraphView.Size.Height;
             graphViewWidth = palGraphView.Size.Width;
             graphViewHalfHeight = graphViewHeight / 2f;
-            graphViewHalfWidth  = graphViewWidth / 2f;
+            graphViewHalfWidth = graphViewWidth / 2f;
             originX = graphViewHalfWidth;
             originY = graphViewHalfHeight;
 
-            painter = new PaintEventHandler(this.DrawGraphView);
-            palGraphView.Paint += painter;        
+            palGraphView.Paint += new PaintEventHandler(this.DrawGraphView);
         }
 
         public void DrawGraphView(object sender, PaintEventArgs e)
         {
             DrawAxis(e);
 
-            
+            int nextColorID = 0;
 
-            DrawGraph(e, tbxFormula.Text, Color.Red);
-            DrawGraph(e, tbxFormula2.Text, Color.Green);
+            foreach (var tbx in functionInputs)
+            {
+                DrawGraph(e, tbx.Text, graphColors[nextColorID]);
+                nextColorID++;
+                if(nextColorID >= graphColors.Length) nextColorID = 0;
+            }
+            
         }
 
         public void DrawGraph(PaintEventArgs e,string formulaText,Color graphColor)
@@ -157,8 +177,6 @@ namespace GraphCalculator
                 return;
                 throw;
             }
-            
-            
 
             bool addToDraw = true;
             for (int x = 0; x < graphViewWidth; x++)
@@ -274,6 +292,38 @@ namespace GraphCalculator
                 }
             }
         }
+        #endregion
 
+        private void AddFunctionSlot()
+        {
+            int index = functionInputs.Count+1;
+
+            Panel slotPanel = new Panel();
+            slotPanel.Name = $"plFunctionFormula{index}";
+            slotPanel.Height = 60;
+            slotPanel.Width = 800;
+            
+            Label slotlabel = new Label();
+            slotlabel.Text = $"f{index}(x)=";
+            slotlabel.Name = $"lbFunctionFormula{index}";
+            slotlabel.Height = 32;
+            slotlabel.Width = 90;
+            slotlabel.Font = labelFont;
+            slotlabel.Location = new Point(6, 13);
+
+            slotPanel.Controls.Add(slotlabel);
+
+            TextBox slotTextBox = new TextBox();
+            slotTextBox.Name = $"tbxFunctionFormula{index}";
+            slotTextBox.Width = 690;
+            slotTextBox.Height = 30;
+            slotTextBox.Location = new Point(102, 16);
+            slotTextBox.TextChanged += tbxFormula_TextChanged;
+            functionInputs.Add(slotTextBox);
+
+            slotPanel.Controls.Add(slotTextBox);
+
+            floloFunctions.Controls.Add(slotPanel);            
+        }
     }
 }
