@@ -134,7 +134,7 @@ namespace GraphCalculator
             {
                 expr = text;
             }
-            catch (AngouriMath.Core.Exceptions.UnhandledParseException)
+            catch (Exception a)
             {
                 System.Console.WriteLine("Function Parsing failed");
                 return;
@@ -147,8 +147,9 @@ namespace GraphCalculator
             {
                 Function = expr.Compile<double, double>("x");
             }
-            catch (System.Collections.Generic.KeyNotFoundException)
+            catch (Exception a)
             {
+                Console.WriteLine("Function Complie Failed");
                 return;
                 throw;
             }
@@ -183,7 +184,7 @@ namespace GraphCalculator
                 {
                     e.Graphics.DrawCurve(pen, draw);
                 }
-                catch (System.OverflowException)
+                catch (Exception a)
                 {
                     System.Console.WriteLine("Draw Faied");
                     return;

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.gbFunctions = new System.Windows.Forms.GroupBox();
+            this.tbxFormula2 = new System.Windows.Forms.TextBox();
             this.tbxFormula = new System.Windows.Forms.TextBox();
             this.palGraphView = new System.Windows.Forms.Panel();
-            this.tbxFormula2 = new System.Windows.Forms.TextBox();
             this.gbFunctions.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,6 +46,14 @@
             this.gbFunctions.TabIndex = 1;
             this.gbFunctions.TabStop = false;
             this.gbFunctions.Text = "Functions";
+            // 
+            // tbxFormula2
+            // 
+            this.tbxFormula2.Location = new System.Drawing.Point(6, 46);
+            this.tbxFormula2.Name = "tbxFormula2";
+            this.tbxFormula2.Size = new System.Drawing.Size(141, 20);
+            this.tbxFormula2.TabIndex = 1;
+            this.tbxFormula2.TextChanged += new System.EventHandler(this.tbxFormula2_TextChanged);
             // 
             // tbxFormula
             // 
@@ -66,14 +74,6 @@
             this.palGraphView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.palGraphView_MouseMove);
             this.palGraphView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.palGraphView_MouseUp);
             // 
-            // tbxFormula2
-            // 
-            this.tbxFormula2.Location = new System.Drawing.Point(6, 46);
-            this.tbxFormula2.Name = "tbxFormula2";
-            this.tbxFormula2.Size = new System.Drawing.Size(141, 20);
-            this.tbxFormula2.TabIndex = 1;
-            this.tbxFormula2.TextChanged += new System.EventHandler(this.tbxFormula2_TextChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -82,7 +82,8 @@
             this.Controls.Add(this.palGraphView);
             this.Controls.Add(this.gbFunctions);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Graph Calculator";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.Zoom);
