@@ -35,7 +35,7 @@
             // 
             // palGraphView
             // 
-            this.palGraphView.Location = new System.Drawing.Point(889, 20);
+            this.palGraphView.Location = new System.Drawing.Point(889, 12);
             this.palGraphView.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.palGraphView.Name = "palGraphView";
             this.palGraphView.Size = new System.Drawing.Size(1000, 1000);
@@ -49,7 +49,7 @@
             // 
             this.floloFunctions.AutoScroll = true;
             this.floloFunctions.BackColor = System.Drawing.Color.Silver;
-            this.floloFunctions.Location = new System.Drawing.Point(12, 20);
+            this.floloFunctions.Location = new System.Drawing.Point(12, 12);
             this.floloFunctions.Name = "floloFunctions";
             this.floloFunctions.Size = new System.Drawing.Size(846, 883);
             this.floloFunctions.TabIndex = 4;
@@ -57,7 +57,7 @@
             // btnAddSlot
             // 
             this.btnAddSlot.Font = new System.Drawing.Font("Arial", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddSlot.Location = new System.Drawing.Point(12, 910);
+            this.btnAddSlot.Location = new System.Drawing.Point(12, 902);
             this.btnAddSlot.Name = "btnAddSlot";
             this.btnAddSlot.Size = new System.Drawing.Size(846, 110);
             this.btnAddSlot.TabIndex = 5;
