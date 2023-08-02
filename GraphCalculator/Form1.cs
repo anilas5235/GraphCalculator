@@ -14,6 +14,7 @@ namespace GraphCalculator
 {
     public partial class Form1 : Form
     {
+        // Attribute
         private float graphViewHalfWidth, graphViewHalfHeight, graphViewWidth, graphViewHeight;
         private float pixelsPerUnit = 100,UnitsPerStep = 1;        
         private double originX,originY;
@@ -40,7 +41,7 @@ namespace GraphCalculator
 
         public Form1()
         {
-            InitializeComponent();                                 
+            InitializeComponent();            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -70,7 +71,7 @@ namespace GraphCalculator
                 this.Refresh();
             }
         }
-
+                
         private void palGraphView_MouseUp(object sender, MouseEventArgs e)
         {
             if(drag && e.Button == MouseButtons.Left) drag = false;
@@ -92,7 +93,15 @@ namespace GraphCalculator
             pixelsPerUnit += delta*pixelsPerUnit*.1f;
             if(pixelsPerUnit == 0) pixelsPerUnit = float.MinValue;            
             this.Refresh();
-        }        
+        }
+
+        private void tbxFormula_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                AddFunctionSlot();
+            }
+        }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
@@ -152,11 +161,11 @@ namespace GraphCalculator
             List<PointF[]> Draws = new List<PointF[]>();
 
             string text = formulaText;
-            Entity expr;
+            Entity expr;  
 
             try
             {
-                expr = text;
+                 expr = text;
             }
             catch (Exception a)
             {
@@ -183,7 +192,7 @@ namespace GraphCalculator
             {
                 double xVal = (x - originX)/pixelsPerUnit;
                 float y =  ((float)originY - (float)Function(xVal)*pixelsPerUnit);  
-                if(y == float.NaN || y == float.NegativeInfinity|| y== float.PositiveInfinity)
+                if(float.IsNaN(y) || y == float.NegativeInfinity|| y== float.PositiveInfinity)
                 {
                     if (addToDraw)
                     {
@@ -202,6 +211,7 @@ namespace GraphCalculator
 
             foreach (var draw in Draws)
             {
+                if (draw.Length < 2) continue;
                 try
                 {
                     e.Graphics.DrawCurve(pen, draw);
@@ -301,7 +311,7 @@ namespace GraphCalculator
             Panel slotPanel = new Panel();
             slotPanel.Name = $"plFunctionFormula{index}";
             slotPanel.Height = 60;
-            slotPanel.Width = 800;
+            slotPanel.Width = 730;
             
             Label slotlabel = new Label();
             slotlabel.Text = $"f{index}(x)=";
@@ -315,15 +325,18 @@ namespace GraphCalculator
 
             TextBox slotTextBox = new TextBox();
             slotTextBox.Name = $"tbxFunctionFormula{index}";
-            slotTextBox.Width = 690;
+            slotTextBox.Width = 620;
             slotTextBox.Height = 30;
             slotTextBox.Location = new Point(102, 16);
             slotTextBox.TextChanged += tbxFormula_TextChanged;
+            slotTextBox.KeyDown += tbxFormula_KeyDown;
             functionInputs.Add(slotTextBox);
 
             slotPanel.Controls.Add(slotTextBox);
 
-            floloFunctions.Controls.Add(slotPanel);            
+            floloFunctions.Controls.Add(slotPanel); 
+            
+            slotTextBox.Focus();
         }
     }
 }
