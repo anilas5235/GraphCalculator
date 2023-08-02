@@ -32,7 +32,8 @@
             this.palGraphView = new System.Windows.Forms.Panel();
             this.floloFunctions = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAddSlot = new System.Windows.Forms.Button();
-            this.ritbxTipps = new System.Windows.Forms.RichTextBox();
+            this.btndeleteSlot = new System.Windows.Forms.Button();
+            this.flowLayoutPToolTipps = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
             // palGraphView
@@ -63,21 +64,31 @@
             this.btnAddSlot.ForeColor = System.Drawing.Color.Black;
             this.btnAddSlot.Location = new System.Drawing.Point(12, 902);
             this.btnAddSlot.Name = "btnAddSlot";
-            this.btnAddSlot.Size = new System.Drawing.Size(763, 110);
+            this.btnAddSlot.Size = new System.Drawing.Size(377, 110);
             this.btnAddSlot.TabIndex = 5;
             this.btnAddSlot.Text = "+";
             this.btnAddSlot.UseVisualStyleBackColor = true;
             this.btnAddSlot.Click += new System.EventHandler(this.btnAddSlot_Click);
             // 
-            // ritbxTipps
+            // btndeleteSlot
             // 
-            this.ritbxTipps.Font = new System.Drawing.Font("Arial", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ritbxTipps.Location = new System.Drawing.Point(781, 12);
-            this.ritbxTipps.Name = "ritbxTipps";
-            this.ritbxTipps.ReadOnly = true;
-            this.ritbxTipps.Size = new System.Drawing.Size(99, 1000);
-            this.ritbxTipps.TabIndex = 0;
-            this.ritbxTipps.Text = resources.GetString("ritbxTipps.Text");
+            this.btndeleteSlot.Font = new System.Drawing.Font("Arial", 72F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btndeleteSlot.ForeColor = System.Drawing.Color.Black;
+            this.btndeleteSlot.Location = new System.Drawing.Point(395, 901);
+            this.btndeleteSlot.Name = "btndeleteSlot";
+            this.btndeleteSlot.Size = new System.Drawing.Size(380, 110);
+            this.btndeleteSlot.TabIndex = 6;
+            this.btndeleteSlot.Text = "-";
+            this.btndeleteSlot.UseVisualStyleBackColor = true;
+            this.btndeleteSlot.Click += new System.EventHandler(this.btndeleteSlot_Click);
+            // 
+            // flowLayoutPToolTipps
+            // 
+            this.flowLayoutPToolTipps.AutoScroll = true;
+            this.flowLayoutPToolTipps.Location = new System.Drawing.Point(782, 12);
+            this.flowLayoutPToolTipps.Name = "flowLayoutPToolTipps";
+            this.flowLayoutPToolTipps.Size = new System.Drawing.Size(98, 999);
+            this.flowLayoutPToolTipps.TabIndex = 7;
             // 
             // Form1
             // 
@@ -85,7 +96,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
-            this.Controls.Add(this.ritbxTipps);
+            this.Controls.Add(this.flowLayoutPToolTipps);
+            this.Controls.Add(this.btndeleteSlot);
             this.Controls.Add(this.btnAddSlot);
             this.Controls.Add(this.floloFunctions);
             this.Controls.Add(this.palGraphView);
@@ -108,7 +120,8 @@
         private System.Windows.Forms.Panel palGraphView;
         private System.Windows.Forms.FlowLayoutPanel floloFunctions;
         private System.Windows.Forms.Button btnAddSlot;
-        private System.Windows.Forms.RichTextBox ritbxTipps;
+        private System.Windows.Forms.Button btndeleteSlot;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPToolTipps;
     }
 }
 

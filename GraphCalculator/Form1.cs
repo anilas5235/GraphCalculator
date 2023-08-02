@@ -9,6 +9,8 @@ using AngouriMath;
 using AngouriMath.Extensions;
 using System.ComponentModel;
 using System.Threading;
+using Antlr4.Runtime.Atn;
+using static AngouriMath.Entity;
 
 namespace GraphCalculator
 {
@@ -32,11 +34,24 @@ namespace GraphCalculator
                     penNormal = new Pen(Brushes.Black, 1),
                     penSmall = new Pen(Color.FromArgb(100, 0, 0, 0), 1);
 
-        Font AxisIndictorsFont = new Font("Arital", 12, FontStyle.Bold);
-        Font labelFont = new Font("Arital", 20, FontStyle.Bold);
+        Font AxisIndictorsFont = new Font("Arital", 12, FontStyle.Bold),
+             TippFont = new Font("Arital", 8, FontStyle.Bold),
+             labelFont = new Font("Arital", 20, FontStyle.Bold);        
 
+        string[] tippFunctions = new string[]
+        {
+            "log","sqrt","cbrt","sqr","ln","sin","cos","tan","abs","cotan","cot","sec",
+            "cosec","csc","arcsin","arccos","arctan","arccotan","arcsec","arccosec","arccsc",
+            "acsc","asin","acos","atan","acotan","asec","acosec","acot","arccot","sinh",
+            "sh","cosh","ch","tanh","th","cotanh","coth","cth","sech","sch","cosech",
+            "csch","asinh","arsinh","arsh","acosh","arcosh","arch","atanh","artanh","arth",
+            "acoth","arcoth","acotanh","arcotanh","arcth","asech","arsech","arsch",
+            "acosech","arcosech","arcsch","acsch","sgn","sign",
+        };
 
         List<TextBox> functionInputs = new List<TextBox>();
+
+        private TextBox focusedBox = null;
 
 
         public Form1()
@@ -47,9 +62,15 @@ namespace GraphCalculator
         {
             GraphViewInitializing(); 
             AddFunctionSlot();
+            CreateTipps(tippFunctions);
         }
 
-        #region EventsOnInput        
+        #region EventsOnInput    
+        
+        private void FocusedTextBoxChanged(object sender, EventArgs e)
+        {
+            focusedBox = sender as TextBox;
+        }
 
         private void palGraphView_MouseDown(object sender, MouseEventArgs e)
         {
@@ -101,6 +122,13 @@ namespace GraphCalculator
             {
                 AddFunctionSlot();
             }
+            else if(e.KeyCode == Keys.Delete)
+            {
+                TextBox textBox = sender as TextBox;
+                textBox.Text = "";
+
+                RemoveFormulaSlot(functionInputs.Count - 1);                
+            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -118,6 +146,11 @@ namespace GraphCalculator
         private void btnAddSlot_Click(object sender, EventArgs e)
         {
             AddFunctionSlot();
+        }
+
+        private void btndeleteSlot_Click(object sender, EventArgs e)
+        {
+            RemoveFormulaSlot(floloFunctions.Controls.Count - 1);
         }
 
         #endregion
@@ -304,6 +337,8 @@ namespace GraphCalculator
         }
         #endregion
 
+        #region FormulaSlots       
+
         private void AddFunctionSlot()
         {
             int index = functionInputs.Count+1;
@@ -330,6 +365,7 @@ namespace GraphCalculator
             slotTextBox.Location = new Point(102, 16);
             slotTextBox.TextChanged += tbxFormula_TextChanged;
             slotTextBox.KeyDown += tbxFormula_KeyDown;
+            slotTextBox.GotFocus += FocusedTextBoxChanged;
             functionInputs.Add(slotTextBox);
 
             slotPanel.Controls.Add(slotTextBox);
@@ -337,6 +373,45 @@ namespace GraphCalculator
             floloFunctions.Controls.Add(slotPanel); 
             
             slotTextBox.Focus();
+        }
+
+        private void RemoveFormulaSlot(int index)
+        {
+            Control toRemoveControl = floloFunctions.Controls[index];
+            floloFunctions.Controls.Remove(toRemoveControl);
+            toRemoveControl.Dispose();
+            functionInputs.RemoveAt(index);
+        }
+        #endregion
+
+        private void CreateTipps(string[] possibleFunctions)
+        {
+
+            foreach (var posFunction in possibleFunctions)
+            {
+                Button tippButton = new Button();
+                tippButton.Text = posFunction;
+                tippButton.Tag = posFunction+"(";
+                tippButton.Name = $"btnTippButton{posFunction}";
+                tippButton.BackColor = Color.Silver;
+                tippButton.Height = 30;
+                tippButton.Width = 70;
+                tippButton.Font = TippFont;
+
+                tippButton.Click += WriteTipp;
+                
+                flowLayoutPToolTipps.Controls.Add(tippButton);
+            }
+            
+        }
+
+        private void WriteTipp(object sender, EventArgs e)
+        { 
+            if(focusedBox != null)
+            {
+                focusedBox.Text += (sender as Button).Tag;
+                focusedBox.Focus();
+            }
         }
     }
 }
